@@ -17,6 +17,15 @@
       },
       "url": "https://package.openupm.com"
     },
+    "com.mirrorng.websocket": {
+      "version": "https://github.com/MirrorNG/WebsocketNG.git?path=/Assets/Mirror/Websocket#simplews",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.mirrorng.mirrorng": "43.3.2"
+      },
+      "hash": "dab43ec2f404691782e30fc89d88727d77636cd8"
+    },
     "com.unity.ext.nunit": {
       "version": "1.0.0",
       "depth": 1,

@@ -3,6 +3,7 @@ using System.Collections;
 using Mirror.KCP;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using Mirror.Websocket;
 
 namespace Mirror.HeadlessBenchmark
 {
@@ -194,30 +195,53 @@ namespace Mirror.HeadlessBenchmark
 
         void ParseForTransport()
         {
-            string transport = GetArgValue("-transport");
+            string transport = GetArgValue("-transport") ?? "kcp";
+            Transport newTransport;
+
+            Console.Write($"Adding transport {transport}");
             switch (transport)
             {
-                case null:
                 case "kcp":
-
-                    Transport newTransport = CreateKcp();
-                    networkManager.server.transport = newTransport;
-                    networkManager.client.Transport = newTransport;
+                     newTransport = CreateKcp();
                     break;
                 case "websocket":
+                    newTransport = CreateWebsocket();
                     break;
+                default:
+                    Console.WriteLine($"Unknown transport {transport}");
+                    Application.Quit();
+                    return;
             }
+
+            networkManager.server.transport = newTransport;
+            networkManager.client.Transport = newTransport;
         }
 
         private Transport CreateKcp()
         {
             KcpTransport newTransport = networkManager.gameObject.AddComponent<KcpTransport>();
 
+            // make it cheap for the clients
+            newTransport.HashCashBits = 1;
+
             //Try to apply port if exists and needed by transport.
             if (!string.IsNullOrEmpty(port))
             {
                 newTransport.Port = ushort.Parse(port);
             }
+            return newTransport;
+        }
+
+        private Transport CreateWebsocket()
+        {
+            WsTransport newTransport = networkManager.gameObject.AddComponent<WsTransport>();
+
+            //Try to apply port if exists and needed by transport.
+            if (!string.IsNullOrEmpty(port))
+            {
+                newTransport.Port = ushort.Parse(port);
+            }
+
             return newTransport;
         }
 
