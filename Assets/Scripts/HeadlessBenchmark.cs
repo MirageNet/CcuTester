@@ -200,19 +200,25 @@ namespace Mirror.HeadlessBenchmark
                 case null:
                 case "kcp":
 
-                    KcpTransport newTransport = networkManager.gameObject.AddComponent<KcpTransport>();
-
-                    //Try to apply port if exists and needed by transport.
-                    if (!string.IsNullOrEmpty(port))
-                    {
-                        newTransport.Port = ushort.Parse(port);
-                    }
+                    Transport newTransport = CreateKcp();
                     networkManager.server.transport = newTransport;
                     networkManager.client.Transport = newTransport;
                     break;
                 case "websocket":
                     break;
             }
+        }
+
+        private Transport CreateKcp()
+        {
+            KcpTransport newTransport = networkManager.gameObject.AddComponent<KcpTransport>();
+
+            //Try to apply port if exists and needed by transport.
+            if (!string.IsNullOrEmpty(port))
+            {
+                newTransport.Port = ushort.Parse(port);
+            }
+            return newTransport;
         }
 
         string GetArgValue(string name)
