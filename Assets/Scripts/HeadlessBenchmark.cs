@@ -32,7 +32,6 @@ namespace Mirror.HeadlessBenchmark
 
             NetworkDiagnostics.InMessageEvent += NetworkDiagnostics_InMessageEvent;
             NetworkDiagnostics.OutMessageEvent += NetworkDiagnostics_OutMessageEvent;
-
         }
 
         private void NetworkDiagnostics_OutMessageEvent(NetworkDiagnostics.MessageInfo obj)
@@ -62,11 +61,11 @@ namespace Mirror.HeadlessBenchmark
 
                 if (Application.isEditor)
                 {
-                    Debug.LogFormat("{0} FPS {1} inbound messages {2} outbound messages {2} clients", frames, inCount, outCount, networkManager.server.NumPlayers);
+                    Debug.LogFormat("{0} FPS {1} inbound messages {2} outbound messages {3} clients", frames, inCount, outCount, networkManager.server.NumPlayers);
                 }
                 else
                 {
-                    Console.WriteLine("{0} FPS {1} inbound messages {2} outbound messages {2} clients", frames, inCount, outCount, networkManager.server.NumPlayers);
+                    Console.WriteLine("{0} FPS {1} inbound messages {2} outbound messages {3} clients", frames, inCount, outCount, networkManager.server.NumPlayers);
                 }
 
                 previousin = inTotal;
@@ -170,8 +169,6 @@ namespace Mirror.HeadlessBenchmark
                 for (int i = 0; i < clonesCount; i++)
                 {
                     await StartClient(i, networkManager.client.Transport, address);
-                    await UniTask.Delay(500);
-
                     Debug.LogFormat("Started {0} clients", i + 1);
                 }
             }
@@ -186,7 +183,7 @@ namespace Mirror.HeadlessBenchmark
                 Console.WriteLine("Also provide these arguments to control the autostart process:");
                 Console.WriteLine("-server (will run in server only mode)");
                 Console.WriteLine("-client 1234 (will run the specified number of clients)");
-                Console.WriteLine("-transport tcp (transport to be used in test. add more by editing HeadlessBenchmark.cs)");
+                Console.WriteLine("-transport {kcp|websocket}");
                 Console.WriteLine("-address example.com (will run the specified number of clients)");
                 Console.WriteLine("-port 1234 (port used by transport)");
                 Console.WriteLine("-monster 100 (number of monsters to spawn on the server)");
@@ -198,19 +195,24 @@ namespace Mirror.HeadlessBenchmark
         void ParseForTransport()
         {
             string transport = GetArgValue("-transport");
-            if (string.IsNullOrEmpty(transport) || transport.Equals("kcp"))
+            switch (transport)
             {
-                KcpTransport newTransport = networkManager.gameObject.AddComponent<KcpTransport>();
+                case null:
+                case "kcp":
 
-                //Try to apply port if exists and needed by transport.
-                if (!string.IsNullOrEmpty(port))
-                {
-                    newTransport.Port = ushort.Parse(port);
-                }
-                networkManager.server.transport = newTransport;
-                networkManager.client.Transport = newTransport;
+                    KcpTransport newTransport = networkManager.gameObject.AddComponent<KcpTransport>();
+
+                    //Try to apply port if exists and needed by transport.
+                    if (!string.IsNullOrEmpty(port))
+                    {
+                        newTransport.Port = ushort.Parse(port);
+                    }
+                    networkManager.server.transport = newTransport;
+                    networkManager.client.Transport = newTransport;
+                    break;
+                case "websocket":
+                    break;
             }
-
         }
 
         string GetArgValue(string name)
