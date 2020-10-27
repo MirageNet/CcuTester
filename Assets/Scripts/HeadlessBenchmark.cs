@@ -15,7 +15,6 @@ namespace Mirror.HeadlessBenchmark
         public string editorArgs;
 
         string[] cachedArgs;
-        string port;
 
         long inTotal;
         long outTotal;
@@ -77,9 +76,6 @@ namespace Mirror.HeadlessBenchmark
 
         void HeadlessStart()
         {
-            //Try to find port
-            port = GetArgValue("-port");
-
             //Try to find Transport
             ParseForTransport();
 
@@ -223,6 +219,7 @@ namespace Mirror.HeadlessBenchmark
 
             // make it cheap for the clients
             newTransport.HashCashBits = 1;
+            var port = GetArgValue("-port");
 
             //Try to apply port if exists and needed by transport.
             if (!string.IsNullOrEmpty(port))
@@ -236,6 +233,7 @@ namespace Mirror.HeadlessBenchmark
         {
             WsTransport newTransport = networkManager.gameObject.AddComponent<WsTransport>();
 
+            var port = GetArgValue("-port");
             //Try to apply port if exists and needed by transport.
             if (!string.IsNullOrEmpty(port))
             {
