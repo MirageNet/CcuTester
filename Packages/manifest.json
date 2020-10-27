@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "com.mirrorng.enet": "1.4.0",
+    "com.mirrorng.enet": "1.4.1",
     "com.mirrorng.mirrorng": "54.1.1",
-    "com.mirrorng.websocket": "1.0.2",
+    "com.mirrorng.websocket": "2.0.0",
     "com.unity.ide.visualstudio": "2.0.3",
     "com.unity.ide.vscode": "1.2.2",
     "com.unity.test-framework": "1.1.18",
