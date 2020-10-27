@@ -43,7 +43,18 @@ namespace Mirror.HeadlessBenchmark
         {
             inTotal++;
         }
+        private void Log(string msg)
+        {
+            if (Application.isEditor)
+            {
+                Debug.Log(msg);
+            }
+            else
+            {
+                Console.WriteLine(msg);
+            }
 
+        }
         private IEnumerator DisplayFramesPerSecons()
         {
             int previousFrameCount = Time.frameCount;
@@ -59,14 +70,7 @@ namespace Mirror.HeadlessBenchmark
                 long inCount = inTotal - previousin;
                 long outCount = outTotal - previousout;
 
-                if (Application.isEditor)
-                {
-                    Debug.LogFormat("{0} FPS {1} inbound messages {2} outbound messages {3} clients", frames, inCount, outCount, networkManager.server.NumPlayers);
-                }
-                else
-                {
-                    Console.WriteLine("{0} FPS {1} inbound messages {2} outbound messages {3} clients", frames, inCount, outCount, networkManager.server.NumPlayers);
-                }
+                Log($"{frames} FPS {inCount} inbound messages {outCount} outbound messages {networkManager.server.NumPlayers} clients");
 
                 previousin = inTotal;
                 previousout = outTotal;
@@ -90,6 +94,7 @@ namespace Mirror.HeadlessBenchmark
 
         void OnServerStarted()
         {
+            Log("Server started");
             StartCoroutine(DisplayFramesPerSecons());
 
             string monster = GetArgValue("-monster");
@@ -134,9 +139,8 @@ namespace Mirror.HeadlessBenchmark
             if (!string.IsNullOrEmpty(GetArg("-server")))
             {
                 networkManager.server.Started.AddListener(OnServerStarted);
-                networkManager.server.Authenticated.AddListener(conn => networkManager.server.SetClientReady(conn));
-                _ = networkManager.server.ListenAsync();
-                Console.WriteLine("Starting Server Only Mode");
+                networkManager.server.ListenAsync().Forget();
+                Log("Starting Server Only Mode");
             }
         }
 
@@ -160,13 +164,13 @@ namespace Mirror.HeadlessBenchmark
                     clonesCount = int.Parse(clonesString);
                 }
 
-                Console.WriteLine("Starting {0} clients", clonesCount);
+                Log($"Starting {clonesCount} clients");
 
                 // connect from a bunch of clients
                 for (int i = 0; i < clonesCount; i++)
                 {
                     await StartClient(i, networkManager.client.Transport, address);
-                    Debug.LogFormat("Started {0} clients", i + 1);
+                    Log($"Started {i+1} clients");
                 }
             }
         }
@@ -194,7 +198,7 @@ namespace Mirror.HeadlessBenchmark
             string transport = GetArgValue("-transport") ?? "kcp";
             Transport newTransport;
 
-            Console.Write($"Adding transport {transport}");
+            Log($"Adding transport {transport}");
             switch (transport)
             {
                 case "kcp":
@@ -204,7 +208,7 @@ namespace Mirror.HeadlessBenchmark
                     newTransport = CreateWebsocket();
                     break;
                 default:
-                    Console.WriteLine($"Unknown transport {transport}");
+                    Log($"Unknown transport {transport}");
                     Application.Quit();
                     return;
             }
