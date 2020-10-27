@@ -7,15 +7,6 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "com.mirrorng.enet": {
-      "version": "https://github.com/MirrorNG/IgnoranceNG.git?path=/Assets/Mirror/Runtime/Transport/Ignorance",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.mirrorng.mirrorng": "43.3.2"
-      },
-      "hash": "b38a27c65465604522707d9b2b111e194f9b474c"
-    },
     "com.mirrorng.mirrorng": {
       "version": "54.1.1",
       "depth": 0,
@@ -27,13 +18,13 @@
       "url": "https://package.openupm.com"
     },
     "com.mirrorng.websocket": {
-      "version": "https://github.com/MirrorNG/WebsocketNG.git?path=/Assets/Mirror/Websocket#simplews",
+      "version": "1.1.0",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {
-        "com.mirrorng.mirrorng": "43.3.2"
+        "com.mirrorng.mirrorng": "git+https://github.com/MirrorNG/MirrorNG.git#upm"
       },
-      "hash": "1d4e24264de299fa4aa1e1131683438683224177"
+      "url": "https://package.openupm.com"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.0",
