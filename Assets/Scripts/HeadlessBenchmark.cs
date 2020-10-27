@@ -4,6 +4,7 @@ using Mirror.KCP;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Mirror.Websocket;
+using Mirror.ENet;
 
 namespace Mirror.HeadlessBenchmark
 {
@@ -184,7 +185,7 @@ namespace Mirror.HeadlessBenchmark
                 Console.WriteLine("Also provide these arguments to control the autostart process:");
                 Console.WriteLine("-server (will run in server only mode)");
                 Console.WriteLine("-client 1234 (will run the specified number of clients)");
-                Console.WriteLine("-transport {kcp|websocket}");
+                Console.WriteLine("-transport {kcp|websocket|enet}");
                 Console.WriteLine("-address example.com (will run the specified number of clients)");
                 Console.WriteLine("-port 1234 (port used by transport)");
                 Console.WriteLine("-monster 100 (number of monsters to spawn on the server)");
@@ -206,6 +207,9 @@ namespace Mirror.HeadlessBenchmark
                     break;
                 case "websocket":
                     newTransport = CreateWebsocket();
+                    break;
+                case "enet":
+                    newTransport = CreateEnet();
                     break;
                 default:
                     Log($"Unknown transport {transport}");
@@ -242,6 +246,20 @@ namespace Mirror.HeadlessBenchmark
             if (!string.IsNullOrEmpty(port))
             {
                 newTransport.Port = ushort.Parse(port);
+            }
+
+            return newTransport;
+        }
+
+        private Transport CreateEnet()
+        {
+            IgnoranceNG newTransport = networkManager.gameObject.AddComponent<IgnoranceNG>();
+
+            var port = GetArgValue("-port");
+            //Try to apply port if exists and needed by transport.
+            if (!string.IsNullOrEmpty(port))
+            {
+                newTransport.Config.CommunicationPort = ushort.Parse(port);
             }
 
             return newTransport;

@@ -7,6 +7,15 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "com.mirrorng.enet": {
+      "version": "https://github.com/MirrorNG/IgnoranceNG.git?path=/Assets/Mirror/Runtime/Transport/Ignorance",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.mirrorng.mirrorng": "43.3.2"
+      },
+      "hash": "b38a27c65465604522707d9b2b111e194f9b474c"
+    },
     "com.mirrorng.mirrorng": {
       "version": "54.1.1",
       "depth": 0,
@@ -24,7 +33,7 @@
       "dependencies": {
         "com.mirrorng.mirrorng": "43.3.2"
       },
-      "hash": "dab43ec2f404691782e30fc89d88727d77636cd8"
+      "hash": "1d4e24264de299fa4aa1e1131683438683224177"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.0",

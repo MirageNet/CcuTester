@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.mirrorng.enet": "https://github.com/MirrorNG/IgnoranceNG.git?path=/Assets/Mirror/Runtime/Transport/Ignorance",
     "com.mirrorng.mirrorng": "54.1.1",
     "com.mirrorng.websocket": "https://github.com/MirrorNG/WebsocketNG.git?path=/Assets/Mirror/Websocket#simplews",
     "com.unity.ide.visualstudio": "2.0.3",
